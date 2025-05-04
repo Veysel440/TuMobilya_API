@@ -1,0 +1,3652 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "TuMobilya-API",
+        "description": "TuMobilya-API için kimlik doğrulama ve mobilya yönetimi API'si",
+        "contact": {
+            "email": "info@tumobilya.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Yerel geliştirme sunucusu"
+        },
+        {
+            "url": "http://tumobilya-api.test"
+        }
+    ],
+    "paths": {
+        "/api/announcements": {
+            "get": {
+                "tags": [
+                    "Duyurular"
+                ],
+                "summary": "Tüm duyuruları listele",
+                "description": "Kayıtlı tüm duyuruları döndürür.",
+                "operationId": "71c08f9cc8bee71c81626251da258590",
+                "responses": {
+                    "200": {
+                        "description": "Duyurular başarıyla listelendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Yeni Mağaza Açılışı"
+                                            },
+                                            "content": {
+                                                "type": "string",
+                                                "example": "İstanbul'da yeni mağazamız açıldı!"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "announcement1.jpg"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Duyurular"
+                ],
+                "summary": "Yeni duyuru ekle",
+                "description": "Yeni bir duyuru oluşturur.",
+                "operationId": "dc2f49bef808056e16e168f71b8830ec",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "content",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Yıl Sonu İndirimi"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Tüm ürünlerde %30 indirim fırsatı!"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "announcement2.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Duyuru başarıyla oluşturuldu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Yıl Sonu İndirimi"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Tüm ürünlerde %30 indirim fırsatı!"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "announcement2.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Duyuru oluşturuldu"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The title field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/announcements/{id}": {
+            "get": {
+                "tags": [
+                    "Duyurular"
+                ],
+                "summary": "Tek bir duyuruyu getir",
+                "description": "Belirtilen ID'ye sahip duyuruyu döndürür.",
+                "operationId": "2938bef7a01a39cf89e059206f5ae0d8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Duyuru bulundu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Yeni Mağaza Açılışı"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "İstanbul'da yeni mağazamız açıldı!"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "announcement1.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Duyuru bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Duyurular"
+                ],
+                "summary": "Duyuru güncelle",
+                "description": "Belirtilen ID'ye sahip duyuruyu günceller.",
+                "operationId": "a8df15398083d218b208ceabff089eb6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "content",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Yıl Sonu İndirimi (Güncellendi)"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Tüm ürünlerde %35 indirim fırsatı!"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "announcement2-updated.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Duyuru güncellendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Yıl Sonu İndirimi (Güncellendi)"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Tüm ürünlerde %35 indirim fırsatı!"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "announcement2-updated.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Duyuru güncellendi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Duyuru bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Duyurular"
+                ],
+                "summary": "Duyuru sil",
+                "description": "Belirtilen ID'ye sahip duyuruyu siler.",
+                "operationId": "6e6001a5b104477475d1a70294d42ba1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Duyuru silindi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Duyuru silindi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Duyuru bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Kimlik Doğrulama"
+                ],
+                "summary": "Yeni kullanıcı kaydı",
+                "description": "Yeni bir kullanıcı kaydeder ve bir API token döndürür.",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Yeni Kullanıcı"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "yeni@tumobilya.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kullanıcı başarıyla kaydedildi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Yeni Kullanıcı"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "yeni@tumobilya.com"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|random-token-string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kullanıcı başarıyla kaydedildi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The email has already been taken."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email has already been taken."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Kimlik Doğrulama"
+                ],
+                "summary": "Kullanıcı girişi",
+                "description": "Kullanıcıyı doğrular ve bir API token döndürür.",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@tumobilya.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Giriş başarılı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Admin Kullanıcı"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "admin@tumobilya.com"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|another-random-token-string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Giriş başarılı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Geçersiz kimlik bilgileri",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Geçersiz kimlik bilgileri"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Kimlik Doğrulama"
+                ],
+                "summary": "Kullanıcı çıkışı",
+                "description": "Kullanıcının mevcut tokenlarını siler ve oturumu kapatır.",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Çıkış yapıldı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Çıkış yapıldı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/blog-posts": {
+            "get": {
+                "tags": [
+                    "Blog Yazıları"
+                ],
+                "summary": "Tüm blog yazılarını listele",
+                "description": "Kayıtlı tüm blog yazılarını döndürür.",
+                "operationId": "7096e8083861f64c4ff8e382bf25ef4a",
+                "responses": {
+                    "200": {
+                        "description": "Blog yazıları başarıyla listelendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Mobilya Seçiminde 5 İpucu"
+                                            },
+                                            "content": {
+                                                "type": "string",
+                                                "example": "Eviniz için doğru mobilyayı seçerken dikkat etmeniz gerekenler..."
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "blog1.jpg"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Blog Yazıları"
+                ],
+                "summary": "Yeni blog yazısı ekle",
+                "description": "Yeni bir blog yazısı oluşturur.",
+                "operationId": "96c2eeb65f1e5106b1e3cec3b8a08809",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "content",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Ev Dekorasyon Trendleri 2025"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "2025'te popüler olacak dekorasyon trendleri hakkında bilgi..."
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "blog2.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Blog yazısı başarıyla oluşturuldu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Ev Dekorasyon Trendleri 2025"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "2025'te popüler olacak dekorasyon trendleri hakkında bilgi..."
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "blog2.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Blog yazısı oluşturuldu"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The title field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/blog-posts/{id}": {
+            "get": {
+                "tags": [
+                    "Blog Yazıları"
+                ],
+                "summary": "Tek bir blog yazısını getir",
+                "description": "Belirtilen ID'ye sahip blog yazısını döndürür.",
+                "operationId": "6faf998fc323ee6f418f0d9d3df9873c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog yazısı bulundu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Mobilya Seçiminde 5 İpucu"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Eviniz için doğru mobilyayı seçerken dikkat etmeniz gerekenler..."
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "blog1.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Blog yazısı bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Blog Yazıları"
+                ],
+                "summary": "Blog yazısı güncelle",
+                "description": "Belirtilen ID'ye sahip blog yazısını günceller.",
+                "operationId": "08433157798f59519c32484c2f034584",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "content",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Mobilya Seçiminde 5 İpucu (Güncellendi)"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Güncellenmiş mobilya seçimi ipuçları..."
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "blog1-updated.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Blog yazısı güncellendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Mobilya Seçiminde 5 İpucu (Güncellendi)"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Güncellenmiş mobilya seçimi ipuçları..."
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "blog1-updated.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Blog yazısı güncellendi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Blog yazısı bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Blog Yazıları"
+                ],
+                "summary": "Blog yazısı sil",
+                "description": "Belirtilen ID'ye sahip blog yazısını siler.",
+                "operationId": "ebbf8f4b9264bed643c76e97780c9391",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog yazısı silindi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Blog yazısı silindi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Blog yazısı bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/contacts": {
+            "get": {
+                "tags": [
+                    "İletişim"
+                ],
+                "summary": "Tüm iletişim mesajlarını listele",
+                "description": "Kayıtlı tüm iletişim mesajlarını döndürür.",
+                "operationId": "0f9efb5609dbb039b35ecafb28e492a2",
+                "responses": {
+                    "200": {
+                        "description": "İletişim mesajları başarıyla listelendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "first_name": {
+                                                "type": "string",
+                                                "example": "Ahmet"
+                                            },
+                                            "last_name": {
+                                                "type": "string",
+                                                "example": "Yılmaz"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "ahmet.yilmaz@example.com"
+                                            },
+                                            "message": {
+                                                "type": "string",
+                                                "example": "Koltuk takımı hakkında bilgi almak istiyorum."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "İletişim"
+                ],
+                "summary": "Yeni iletişim mesajı ekle",
+                "description": "Yeni bir iletişim mesajı oluşturur.",
+                "operationId": "a3b0baf957a16c1ed505f2e8985c254c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Mehmet"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Demir"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "mehmet.demir@example.com"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Yeni koleksiyon hakkında bilgi almak istiyorum."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "İletişim mesajı başarıyla oluşturuldu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "first_name": {
+                                                    "type": "string",
+                                                    "example": "Mehmet"
+                                                },
+                                                "last_name": {
+                                                    "type": "string",
+                                                    "example": "Demir"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "mehmet.demir@example.com"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Yeni koleksiyon hakkında bilgi almak istiyorum."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "İletişim mesajı oluşturuldu"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The first_name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/contacts/{id}": {
+            "get": {
+                "tags": [
+                    "İletişim"
+                ],
+                "summary": "Tek bir iletişim mesajını getir",
+                "description": "Belirtilen ID'ye sahip iletişim mesajını döndürür.",
+                "operationId": "4b37f4c90f5cd7974a09bd688ac4d3dd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "İletişim mesajı bulundu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "first_name": {
+                                                    "type": "string",
+                                                    "example": "Ahmet"
+                                                },
+                                                "last_name": {
+                                                    "type": "string",
+                                                    "example": "Yılmaz"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "ahmet.yilmaz@example.com"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Koltuk takımı hakkında bilgi almak istiyorum."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "İletişim mesajı bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "İletişim"
+                ],
+                "summary": "İletişim mesajı güncelle",
+                "description": "Belirtilen ID'ye sahip iletişim mesajını günceller.",
+                "operationId": "554514967b71c75698b6cef012de4420",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Mehmet"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Demir (Güncellendi)"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "mehmet.demir@example.com"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Güncellenmiş mesaj."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "İletişim mesajı güncellendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "first_name": {
+                                                    "type": "string",
+                                                    "example": "Mehmet"
+                                                },
+                                                "last_name": {
+                                                    "type": "string",
+                                                    "example": "Demir (Güncellendi)"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "mehmet.demir@example.com"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Güncellenmiş mesaj."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "İletişim mesajı güncellendi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "İletişim mesajı bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "İletişim"
+                ],
+                "summary": "İletişim mesajı sil",
+                "description": "Belirtilen ID'ye sahip iletişim mesajını siler.",
+                "operationId": "3a78f2af1871a21a2b5a492134d72017",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "İletişim mesajı silindi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "İletişim mesajı silindi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "İletişim mesajı bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/menus": {
+            "get": {
+                "tags": [
+                    "Menüler"
+                ],
+                "summary": "Tüm menüleri listele",
+                "description": "Kayıtlı tüm menüleri döndürür.",
+                "operationId": "1dc6b7b84ebea40905c68ce4f844da25",
+                "responses": {
+                    "200": {
+                        "description": "Menüler başarıyla listelendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Ana Sayfa"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "example": "/"
+                                            },
+                                            "page_description": {
+                                                "type": "string",
+                                                "example": "TuMobilya ana sayfası"
+                                            },
+                                            "page_title": {
+                                                "type": "string",
+                                                "example": "Hoş Geldiniz"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Menüler"
+                ],
+                "summary": "Yeni menü ekle",
+                "description": "Yeni bir menü oluşturur.",
+                "operationId": "37652f848e93b047d0f6f39cb4df6269",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "url"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Hakkımızda"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "example": "/about"
+                                    },
+                                    "page_description": {
+                                        "type": "string",
+                                        "example": "TuMobilya hakkında bilgiler"
+                                    },
+                                    "page_title": {
+                                        "type": "string",
+                                        "example": "Hakkımızda"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Menü başarıyla oluşturuldu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Hakkımızda"
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "example": "/about"
+                                                },
+                                                "page_description": {
+                                                    "type": "string",
+                                                    "example": "TuMobilya hakkında bilgiler"
+                                                },
+                                                "page_title": {
+                                                    "type": "string",
+                                                    "example": "Hakkımızda"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Menü oluşturuldu"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The title field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/menus/{id}": {
+            "get": {
+                "tags": [
+                    "Menüler"
+                ],
+                "summary": "Tek bir menüyü getir",
+                "description": "Belirtilen ID'ye sahip menüyü döndürür.",
+                "operationId": "358e9ead3d3f6d8fd5b51d1f0882dc83",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menü bulundu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Ana Sayfa"
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "example": "/"
+                                                },
+                                                "page_description": {
+                                                    "type": "string",
+                                                    "example": "TuMobilya ana sayfası"
+                                                },
+                                                "page_title": {
+                                                    "type": "string",
+                                                    "example": "Hoş Geldiniz"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Menü bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Menüler"
+                ],
+                "summary": "Menü güncelle",
+                "description": "Belirtilen ID'ye sahip menüyü günceller.",
+                "operationId": "67ceffba16f3b7be4391a4d6681fa431",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "url"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Hakkımızda (Güncellendi)"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "example": "/about-updated"
+                                    },
+                                    "page_description": {
+                                        "type": "string",
+                                        "example": "Güncellenmiş bilgiler"
+                                    },
+                                    "page_title": {
+                                        "type": "string",
+                                        "example": "Hakkımızda Güncellendi"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Menü güncellendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Hakkımızda (Güncellendi)"
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "example": "/about-updated"
+                                                },
+                                                "page_description": {
+                                                    "type": "string",
+                                                    "example": "Güncellenmiş bilgiler"
+                                                },
+                                                "page_title": {
+                                                    "type": "string",
+                                                    "example": "Hakkımızda Güncellendi"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Menü güncellendi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Menü bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Menüler"
+                ],
+                "summary": "Menü sil",
+                "description": "Belirtilen ID'ye sahip menüyü siler.",
+                "operationId": "abff8a90938116c08c448319c3dc7323",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menü silindi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Menü silindi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Menü bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Ürünler"
+                ],
+                "summary": "Tüm ürünleri listele",
+                "description": "Kayıtlı tüm ürünleri döndürür.",
+                "operationId": "1bfaa78d1c2c3848ab8165c5dadcad3e",
+                "responses": {
+                    "200": {
+                        "description": "Ürünler başarıyla listelendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Modern Koltuk Takımı"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "koltuk-takimi.jpg"
+                                            },
+                                            "price": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 4999.99
+                                            },
+                                            "product_details": {
+                                                "type": "string",
+                                                "example": "Rahat ve şık bir koltuk takımı."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Ürünler"
+                ],
+                "summary": "Yeni ürün ekle",
+                "description": "Yeni bir ürün oluşturur.",
+                "operationId": "e8185e307706e2cd84bbcf5171e2f09d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Lüks Yatak Odası Takımı"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "yatak-odasi.jpg"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 7999.99
+                                    },
+                                    "product_details": {
+                                        "type": "string",
+                                        "example": "Modern tasarım, beyaz lake kaplama."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ürün başarıyla oluşturuldu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Lüks Yatak Odası Takımı"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "yatak-odasi.jpg"
+                                                },
+                                                "price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 7999.99
+                                                },
+                                                "product_details": {
+                                                    "type": "string",
+                                                    "example": "Modern tasarım, beyaz lake kaplama."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ürün oluşturuldu"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "tags": [
+                    "Ürünler"
+                ],
+                "summary": "Tek bir ürünü getir",
+                "description": "Belirtilen ID'ye sahip ürünü döndürür.",
+                "operationId": "7ab21ddb713501f3d4c2914892c02a21",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ürün bulundu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Modern Koltuk Takımı"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "koltuk-takimi.jpg"
+                                                },
+                                                "price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 4999.99
+                                                },
+                                                "product_details": {
+                                                    "type": "string",
+                                                    "example": "Rahat ve şık bir koltuk takımı."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ürün bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Ürünler"
+                ],
+                "summary": "Ürün güncelle",
+                "description": "Belirtilen ID'ye sahip ürünü günceller.",
+                "operationId": "6a7e11900844cd85cff66e662b82bd4c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Modern Koltuk Takımı (Güncellendi)"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "koltuk-takimi-guncel.jpg"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 5499.99
+                                    },
+                                    "product_details": {
+                                        "type": "string",
+                                        "example": "Gri kumaş kaplama, ekstra konforlu."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ürün güncellendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Modern Koltuk Takımı (Güncellendi)"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "koltuk-takimi-guncel.jpg"
+                                                },
+                                                "price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 5499.99
+                                                },
+                                                "product_details": {
+                                                    "type": "string",
+                                                    "example": "Gri kumaş kaplama, ekstra konforlu."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ürün güncellendi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ürün bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ürünler"
+                ],
+                "summary": "Ürün sil",
+                "description": "Belirtilen ID'ye sahip ürünü siler.",
+                "operationId": "e80a6ca46716acee6b47ea1ac91663c0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ürün silindi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ürün silindi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ürün bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/settings": {
+            "get": {
+                "tags": [
+                    "Ayarlar"
+                ],
+                "summary": "Tüm ayarları listele",
+                "description": "Kayıtlı tüm ayarları döndürür.",
+                "operationId": "04b6f539c3af7d460d214177ac396d5e",
+                "responses": {
+                    "200": {
+                        "description": "Ayarlar başarıyla listelendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+90 555 123 45 67"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "info@tumobilya.com"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "Mobilya Sokak No:123, İstanbul, Türkiye"
+                                            },
+                                            "short_address": {
+                                                "type": "string",
+                                                "example": "İstanbul, Türkiye"
+                                            },
+                                            "facebook": {
+                                                "type": "string",
+                                                "example": "https://facebook.com/tumobilya"
+                                            },
+                                            "twitter": {
+                                                "type": "string",
+                                                "example": "https://twitter.com/tumobilya"
+                                            },
+                                            "instagram": {
+                                                "type": "string",
+                                                "example": "https://instagram.com/tumobilya"
+                                            },
+                                            "youtube": {
+                                                "type": "string",
+                                                "example": "https://youtube.com/tumobilya"
+                                            },
+                                            "general_title": {
+                                                "type": "string",
+                                                "example": "TuMobilya - Kaliteli Mobilyalar"
+                                            },
+                                            "general_description": {
+                                                "type": "string",
+                                                "example": "Evlerinize şıklık ve konfor katan mobilya çözümleri."
+                                            },
+                                            "general_photo": {
+                                                "type": "string",
+                                                "example": "logo.jpg"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Ayarlar"
+                ],
+                "summary": "Yeni ayar ekle",
+                "description": "Yeni bir ayar oluşturur.",
+                "operationId": "ef7c9bfa1e8e609feb26624dcf678ca1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+90 555 987 65 43"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "support@tumobilya.com"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Yeni Sokak No:456, İstanbul, Türkiye"
+                                    },
+                                    "short_address": {
+                                        "type": "string",
+                                        "example": "İstanbul, Türkiye"
+                                    },
+                                    "facebook": {
+                                        "type": "string",
+                                        "example": "https://facebook.com/tumobilya2"
+                                    },
+                                    "twitter": {
+                                        "type": "string",
+                                        "example": "https://twitter.com/tumobilya2"
+                                    },
+                                    "instagram": {
+                                        "type": "string",
+                                        "example": "https://instagram.com/tumobilya2"
+                                    },
+                                    "youtube": {
+                                        "type": "string",
+                                        "example": "https://youtube.com/tumobilya2"
+                                    },
+                                    "general_title": {
+                                        "type": "string",
+                                        "example": "TuMobilya - Yeni Nesil Mobilyalar"
+                                    },
+                                    "general_description": {
+                                        "type": "string",
+                                        "example": "Yeni nesil mobilya çözümleri."
+                                    },
+                                    "general_photo": {
+                                        "type": "string",
+                                        "example": "logo2.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ayar başarıyla oluşturuldu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "+90 555 987 65 43"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "support@tumobilya.com"
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "Yeni Sokak No:456, İstanbul, Türkiye"
+                                                },
+                                                "short_address": {
+                                                    "type": "string",
+                                                    "example": "İstanbul, Türkiye"
+                                                },
+                                                "facebook": {
+                                                    "type": "string",
+                                                    "example": "https://facebook.com/tumobilya2"
+                                                },
+                                                "twitter": {
+                                                    "type": "string",
+                                                    "example": "https://twitter.com/tumobilya2"
+                                                },
+                                                "instagram": {
+                                                    "type": "string",
+                                                    "example": "https://instagram.com/tumobilya2"
+                                                },
+                                                "youtube": {
+                                                    "type": "string",
+                                                    "example": "https://youtube.com/tumobilya2"
+                                                },
+                                                "general_title": {
+                                                    "type": "string",
+                                                    "example": "TuMobilya - Yeni Nesil Mobilyalar"
+                                                },
+                                                "general_description": {
+                                                    "type": "string",
+                                                    "example": "Yeni nesil mobilya çözümleri."
+                                                },
+                                                "general_photo": {
+                                                    "type": "string",
+                                                    "example": "logo2.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ayar oluşturuldu"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The email field must be a valid email address."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/settings/{id}": {
+            "get": {
+                "tags": [
+                    "Ayarlar"
+                ],
+                "summary": "Tek bir ayarı getir",
+                "description": "Belirtilen ID'ye sahip ayarı döndürür.",
+                "operationId": "0073a8b628392ff4d6dc0b3c83d8db64",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ayar bulundu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "+90 555 123 45 67"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "info@tumobilya.com"
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "Mobilya Sokak No:123, İstanbul, Türkiye"
+                                                },
+                                                "short_address": {
+                                                    "type": "string",
+                                                    "example": "İstanbul, Türkiye"
+                                                },
+                                                "facebook": {
+                                                    "type": "string",
+                                                    "example": "https://facebook.com/tumobilya"
+                                                },
+                                                "twitter": {
+                                                    "type": "string",
+                                                    "example": "https://twitter.com/tumobilya"
+                                                },
+                                                "instagram": {
+                                                    "type": "string",
+                                                    "example": "https://instagram.com/tumobilya"
+                                                },
+                                                "youtube": {
+                                                    "type": "string",
+                                                    "example": "https://youtube.com/tumobilya"
+                                                },
+                                                "general_title": {
+                                                    "type": "string",
+                                                    "example": "TuMobilya - Kaliteli Mobilyalar"
+                                                },
+                                                "general_description": {
+                                                    "type": "string",
+                                                    "example": "Evlerinize şıklık ve konfor katan mobilya çözümleri."
+                                                },
+                                                "general_photo": {
+                                                    "type": "string",
+                                                    "example": "logo.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ayar bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Ayarlar"
+                ],
+                "summary": "Ayar güncelle",
+                "description": "Belirtilen ID'ye sahip ayarı günceller.",
+                "operationId": "1c2b72ef275d52148bae0ed2e7e2ee8c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+90 555 987 65 43"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "support@tumobilya.com"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Yeni Sokak No:456, İstanbul, Türkiye"
+                                    },
+                                    "short_address": {
+                                        "type": "string",
+                                        "example": "İstanbul, Türkiye"
+                                    },
+                                    "facebook": {
+                                        "type": "string",
+                                        "example": "https://facebook.com/tumobilya2"
+                                    },
+                                    "twitter": {
+                                        "type": "string",
+                                        "example": "https://twitter.com/tumobilya2"
+                                    },
+                                    "instagram": {
+                                        "type": "string",
+                                        "example": "https://instagram.com/tumobilya2"
+                                    },
+                                    "youtube": {
+                                        "type": "string",
+                                        "example": "https://youtube.com/tumobilya2"
+                                    },
+                                    "general_title": {
+                                        "type": "string",
+                                        "example": "TuMobilya - Yeni Nesil Mobilyalar"
+                                    },
+                                    "general_description": {
+                                        "type": "string",
+                                        "example": "Yeni nesil mobilya çözümleri."
+                                    },
+                                    "general_photo": {
+                                        "type": "string",
+                                        "example": "logo2.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ayar güncellendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "+90 555 987 65 43"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "support@tumobilya.com"
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "Yeni Sokak No:456, İstanbul, Türkiye"
+                                                },
+                                                "short_address": {
+                                                    "type": "string",
+                                                    "example": "İstanbul, Türkiye"
+                                                },
+                                                "facebook": {
+                                                    "type": "string",
+                                                    "example": "https://facebook.com/tumobilya2"
+                                                },
+                                                "twitter": {
+                                                    "type": "string",
+                                                    "example": "https://twitter.com/tumobilya2"
+                                                },
+                                                "instagram": {
+                                                    "type": "string",
+                                                    "example": "https://instagram.com/tumobilya2"
+                                                },
+                                                "youtube": {
+                                                    "type": "string",
+                                                    "example": "https://youtube.com/tumobilya2"
+                                                },
+                                                "general_title": {
+                                                    "type": "string",
+                                                    "example": "TuMobilya - Yeni Nesil Mobilyalar"
+                                                },
+                                                "general_description": {
+                                                    "type": "string",
+                                                    "example": "Yeni nesil mobilya çözümleri."
+                                                },
+                                                "general_photo": {
+                                                    "type": "string",
+                                                    "example": "logo2.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ayar güncellendi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ayar bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ayarlar"
+                ],
+                "summary": "Ayar sil",
+                "description": "Belirtilen ID'ye sahip ayarı siler.",
+                "operationId": "743f1487c3da219357510aee0af7c9dc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ayar silindi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ayar silindi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ayar bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/sliders": {
+            "get": {
+                "tags": [
+                    "Slaytlar"
+                ],
+                "summary": "Tüm slaytları listele",
+                "description": "Kayıtlı tüm slaytları döndürür.",
+                "operationId": "f3f821bb23189c1aa1f07dcc34fbd7b3",
+                "responses": {
+                    "200": {
+                        "description": "Slaytlar başarıyla listelendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Yeni Koleksiyon"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "2025 mobilya koleksiyonumuzu keşfedin!"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "slider1.jpg"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Kimlik doğrulanmadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Slaytlar"
+                ],
+                "summary": "Yeni slayt ekle",
+                "description": "Yeni bir slayt oluşturur.",
+                "operationId": "40e04352099ba3630b0ecd3d8a07ff4a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Yaz İndirimi"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Tüm ürünlerde %20 indirim!"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "slider3.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Slayt başarıyla oluşturuldu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Yaz İndirimi"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Tüm ürünlerde %20 indirim!"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "slider3.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Slayt oluşturuldu"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasyon hatası",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The title field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/sliders/{id}": {
+            "get": {
+                "tags": [
+                    "Slaytlar"
+                ],
+                "summary": "Tek bir slaytı getir",
+                "description": "Belirtilen ID'ye sahip slaytı döndürür.",
+                "operationId": "3bfeb31fa1033fda85c708993d64ea25",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Slayt bulundu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Yeni Koleksiyon"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "2025 mobilya koleksiyonumuzu keşfedin!"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "slider1.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Slayt bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Slaytlar"
+                ],
+                "summary": "Slayt güncelle",
+                "description": "Belirtilen ID'ye sahip slaytı günceller.",
+                "operationId": "69287588ebbfccfab3ba79f95438e0df",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Yaz İndirimi (Güncellendi)"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Tüm ürünlerde %25 indirim!"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "slider3-updated.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Slayt güncellendi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Yaz İndirimi (Güncellendi)"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Tüm ürünlerde %25 indirim!"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "slider3-updated.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Slayt güncellendi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Slayt bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Slaytlar"
+                ],
+                "summary": "Slayt sil",
+                "description": "Belirtilen ID'ye sahip slaytı siler.",
+                "operationId": "47b0483bc8d101c4a10bea5ef85ea075",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Slayt silindi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Slayt silindi"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Slayt bulunamadı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kaynak bulunamadı"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Duyurular",
+            "description": "Duyuru yönetimi ile ilgili endpoint'ler"
+        },
+        {
+            "name": "Kimlik Doğrulama",
+            "description": "Kullanıcı kimlik doğrulama işlemleri"
+        },
+        {
+            "name": "Blog Yazıları",
+            "description": "Blog yazıları ile ilgili endpoint'ler"
+        },
+        {
+            "name": "İletişim",
+            "description": "İletişim mesajları ile ilgili endpoint'ler"
+        },
+        {
+            "name": "Menüler",
+            "description": "Menü yönetimi ile ilgili endpoint'ler"
+        },
+        {
+            "name": "Ürünler",
+            "description": "Ürün yönetimi ile ilgili endpoint'ler"
+        },
+        {
+            "name": "Ayarlar",
+            "description": "Site ayarları ile ilgili endpoint'ler"
+        },
+        {
+            "name": "Slaytlar",
+            "description": "Slayt yönetimi ile ilgili endpoint'ler"
+        }
+    ]
+}
